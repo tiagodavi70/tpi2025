@@ -1,6 +1,6 @@
 import sqlite3
 
-conn = sqlite3.connect("exame.db")
+conn = sqlite3.connect("clinica.db")
 conn.execute("PRAGMA foreign_keys = ON")
 cursor = conn.cursor()
 
@@ -12,11 +12,12 @@ CREATE TABLE IF NOT EXISTS medico (
 );
 """)
 
+## Coloque aqui a tabela paciente
 cursor.execute("""
-CREATE TABLE IF NOT EXISTS paciente (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    nome VARCHAR(45) NOT NULL
-);
+CREATE TABLE IF NOT EXISTS paciente(
+    id INTEGER PRIMARY KEY NOT NULL,
+    nome TEXT NOT NULL
+)
 """)
 
 cursor.execute("""         
@@ -55,6 +56,25 @@ INSERT INTO consulta (data, paciente_id, medico_id) VALUES
 ('2025-01-12', 3, 3),
 ('2025-01-13', 4, 4),
 ('2025-01-14', 5, 5);
+""")
+
+## Coloque aqui a tabela exame
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS exame(
+    id INTEGER PRIMARY KEY NOT NULL,
+    nome TEXT,
+    id_consulta INTEGER NOT NULL,
+    FOREIGN KEY (id_consulta) REFERENCES consulta(id)
+)
+""")
+
+cursor.execute("""
+INSERT INTO exame (nome, id_consulta) VALUES
+('Eletrocardiograma', 1),
+('Exame de Sangue', 2),
+('Raio-X', 3),
+('Biópsia de Pele', 4),
+('Ressonância Magnética', 5);
 """)
 
 conn.commit()
